@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="MainAppTheme" parent="MaterialDrawerTheme.Light.TranslucentStatus">
+        <item name="android:windowTranslucentNavigation" tools:targetApi="19">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="19">true</item>
+    </style>
+
+</resources>

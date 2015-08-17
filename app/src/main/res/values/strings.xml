@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">School Schedules</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+
+    <string name="drawer_representations">Representations</string>
+
+    <string name="no_representations">No Representations</string>
+
+    <string name="class_name_hint">ITF2-13</string>
+    <string name="ok">OK</string>
+
+    <string name="api_key">126f5f4f90914edc805f85fd94e99ba4a619fb2d0f70f938b4b11adaf623fea79668b196d21070cc960058c336911d66bf501fdb2353837402f705045dd903f657d3b2810419de077508bf4705183ac2</string>
+    <string name="user">126f5f4f-9091-4edc-805f-85fd94e99ba4</string>
+    <string name="data">582badfb-22cb-4838-b0dd-a5e61f3627b1</string>
+</resources>
