@@ -22,6 +22,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
+import fabianterhorst.github.io.schoolschedules.DataStore;
 import fabianterhorst.github.io.schoolschedules.R;
 import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragment;
 
@@ -51,7 +52,7 @@ public class MainActivity extends BaseActivity {
                 .withSelectionListEnabled(false)
                 .withHeaderBackground(R.drawable.material_drawer_shadow_top)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(getDataStore().getCurrentSchoolClass().getClass_name()).withEmail("bla").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_account_circle).color(Color.WHITE).sizeDp(IconicsDrawable.ANDROID_ACTIONBAR_ICON_SIZE_DP)).withEnabled(false).withIdentifier(1)
+                        new ProfileDrawerItem().withName("").withEmail("").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_account_circle).color(Color.WHITE).sizeDp(IconicsDrawable.ANDROID_ACTIONBAR_ICON_SIZE_DP)).withEnabled(false).withIdentifier(1)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -68,7 +69,6 @@ public class MainActivity extends BaseActivity {
                 .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withFullscreen(true)
-                /*.withTranslucentNavigationBarProgrammatically(true)*/
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_representations).withIdentifier(1).withIcon(CommunityMaterial.Icon.cmd_view_dashboard).withSelectable(true)
                 )
@@ -99,6 +99,25 @@ public class MainActivity extends BaseActivity {
                 .build();
 
         mDrawer.setSelection(1);
+
+        getDataStore().registerSchoolClassesDataChangeCallback(new DataStore.SchoolClassesDataChangeCallback() {
+            @Override
+            public void onSchoolClassesDataChange() {
+                updateProfile();
+            }
+        });
+
+        updateProfile();
+
+        getDataStore().refreshSchoolClasses();
+    }
+
+    private void updateProfile(){
+        if(getDataStore().getCurrentSchoolClass() != null) {
+            IProfile profileDrawerItem = mHeader.getActiveProfile();
+            profileDrawerItem.withName(getDataStore().getCurrentSchoolClass().getClass_name());
+            mHeader.updateProfileByIdentifier(profileDrawerItem);
+        }
     }
 
     /**

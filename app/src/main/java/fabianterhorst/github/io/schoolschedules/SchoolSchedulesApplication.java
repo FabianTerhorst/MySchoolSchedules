@@ -97,12 +97,7 @@ public class SchoolSchedulesApplication extends Application {
     public void logout() {
         //clear all user settings
         clearSettings();
-        //close realm to make it deletable
-        getRealm().close();
-        //delete realm
-        Realm.deleteRealm(getRealmConfiguration());
-        //create a new instance because the old one is closed
-        mRealm = Realm.getInstance(getRealmConfiguration());
+        mRealm.where(User.class).findAll().clear();
         Intent intent = new Intent(this, getSplashActivity().getClass());
         intent.addFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
