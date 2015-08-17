@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import com.mikepenz.materialize.util.UIUtils;
 
 public class ClassNameView extends LinearLayout {
-
+    //Todo : WIP
     public ClassNameView(Context context) {
         super(context);
     }

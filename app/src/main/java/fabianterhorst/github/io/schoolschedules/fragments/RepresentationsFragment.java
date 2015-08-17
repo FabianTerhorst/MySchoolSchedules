@@ -1,4 +1,4 @@
-package fabianterhorst.github.io.schoolschedules;
+package fabianterhorst.github.io.schoolschedules.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +15,8 @@ import com.mikepenz.materialize.util.UIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import fabianterhorst.github.io.schoolschedules.DataStore;
+import fabianterhorst.github.io.schoolschedules.R;
 import fabianterhorst.github.io.schoolschedules.adapter.RepresentationAdapter;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
 import fabianterhorst.github.io.schoolschedules.models.Representation;

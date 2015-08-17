@@ -1,4 +1,4 @@
-package fabianterhorst.github.io.schoolschedules;
+package fabianterhorst.github.io.schoolschedules.activities;
 
 public class SplashActivity extends AbstractSplashActivity {
 

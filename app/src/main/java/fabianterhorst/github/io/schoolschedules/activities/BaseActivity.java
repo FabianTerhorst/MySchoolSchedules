@@ -1,7 +1,11 @@
-package fabianterhorst.github.io.schoolschedules;
+package fabianterhorst.github.io.schoolschedules.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import fabianterhorst.github.io.schoolschedules.DataStore;
+import fabianterhorst.github.io.schoolschedules.R;
+import fabianterhorst.github.io.schoolschedules.SchoolSchedulesApplication;
 
 public class BaseActivity extends AppCompatActivity {
 

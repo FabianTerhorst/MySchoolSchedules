@@ -1,7 +1,10 @@
-package fabianterhorst.github.io.schoolschedules;
+package fabianterhorst.github.io.schoolschedules.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+
+import fabianterhorst.github.io.schoolschedules.DataStore;
+import fabianterhorst.github.io.schoolschedules.SchoolSchedulesApplication;
 
 public class BaseFragment extends Fragment {
 

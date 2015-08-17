@@ -1,4 +1,4 @@
-package fabianterhorst.github.io.schoolschedules;
+package fabianterhorst.github.io.schoolschedules.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import fabianterhorst.github.io.schoolschedules.R;
+import fabianterhorst.github.io.schoolschedules.SchoolSchedulesApplication;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
 import fabianterhorst.github.io.schoolschedules.models.User;
 

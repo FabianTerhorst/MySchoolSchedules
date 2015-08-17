@@ -1,4 +1,4 @@
-package fabianterhorst.github.io.schoolschedules;
+package fabianterhorst.github.io.schoolschedules.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -21,6 +21,9 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
+
+import fabianterhorst.github.io.schoolschedules.R;
+import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragment;
 
 public class MainActivity extends BaseActivity {
 
