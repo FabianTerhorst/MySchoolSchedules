@@ -8,6 +8,7 @@ import java.util.List;
 import fabianterhorst.github.io.schoolschedules.adapter.RestApiAdapter;
 import fabianterhorst.github.io.schoolschedules.api.PictoriusApi;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
+import fabianterhorst.github.io.schoolschedules.models.Lesson;
 import fabianterhorst.github.io.schoolschedules.models.Representation;
 import fabianterhorst.github.io.schoolschedules.models.RepresentationResult;
 import fabianterhorst.github.io.schoolschedules.models.SchoolClass;
@@ -53,8 +54,25 @@ public class DataStore {
         callTeacherCallbacks();
     }
 
+    public void updateOrAddLesson(final Lesson lesson){
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                lesson.setId(Math.round(realm.where(Lesson.class).maximumInt("id") + 1));
+                realm.copyToRealmOrUpdate(lesson);
+            }
+        });
+        callLessonCallbacks();
+    }
+
     public void deleteTeacherById(int id){
         getTeacherById(id).removeFromRealm();
+        callTeacherCallbacks();
+    }
+
+    public void deleteLessonById(int id){
+        getLessonById(id).removeFromRealm();
+        callLessonCallbacks();
     }
 
     public void refreshSchoolClasses() {
@@ -135,6 +153,11 @@ public class DataStore {
             dataChangeCallback.onTeacherDataChange();
     }
 
+    public void callLessonCallbacks() {
+        for (DataChangeCallback dataChangeCallback : mCallbacks)
+            dataChangeCallback.onLessonDataChange();
+    }
+
     public void callCallbacks(SchoolClass schoolClass, List<Representation> representations) {
         for (DataChangeCallback dataChangeCallback : mCallbacks)
             if (dataChangeCallback.getClassName() != null)
@@ -171,7 +194,11 @@ public class DataStore {
     }
 
     public Teacher getTeacherById(int id){
-        return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).equalTo("id",id).findFirst();
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).equalTo("id", id).findFirst();
+    }
+
+    public Lesson getLessonById(int id){
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).equalTo("id",id).findFirst();
     }
 
 }
