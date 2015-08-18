@@ -25,7 +25,10 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import fabianterhorst.github.io.schoolschedules.DataStore;
 import fabianterhorst.github.io.schoolschedules.R;
+import fabianterhorst.github.io.schoolschedules.fragments.HomeworksFragment;
+import fabianterhorst.github.io.schoolschedules.fragments.LessonsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragment;
+import fabianterhorst.github.io.schoolschedules.fragments.TeachersFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -78,6 +81,7 @@ public class MainActivity extends BaseActivity {
                         new PrimaryDrawerItem().withName(R.string.drawer_teacher).withIdentifier(4).withIcon(CommunityMaterial.Icon.cmd_school),
                         new PrimaryDrawerItem().withName(R.string.drawer_homework).withIdentifier(5).withIcon(CommunityMaterial.Icon.cmd_clipboard_text).withBadgeStyle(new BadgeStyle().withColorRes(R.color.md_red_500).withTextColorRes(R.color.md_white_1000).withCorners(30)).withBadge("5")
                 )
+                .withCloseOnClick(true)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 
                     @Override
@@ -89,14 +93,28 @@ public class MainActivity extends BaseActivity {
                                     mLastFragment = new RepresentationsFragment();
                                     break;
                                 }
+                                case 3: {
+                                    mLastFragment = new LessonsFragment();
+                                    break;
+                                }
+                                case 4: {
+                                    mLastFragment = new TeachersFragment();
+                                    break;
+                                }
+                                case 5: {
+                                    mLastFragment = new HomeworksFragment();
+                                    break;
+                                }
                             }
 
-                            if(mLastFragment != null)
+                            if (mLastFragment != null)
                                 mFragmentManager.beginTransaction().replace(R.id.content_frame, mLastFragment).commit();
 
                             if (drawerItem instanceof Nameable) {
                                 mToolbar.setTitle(((Nameable) drawerItem).getName().getText(MainActivity.this));
                             }
+
+                            mDrawer.closeDrawer();
 
                         }
                         return true;

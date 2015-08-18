@@ -29,7 +29,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public void onBindViewHolder(LessonAdapter.ViewHolder holder, int position) {
         Lesson lesson = lessons.get(position);
         holder.name.setText(lesson.getName());
-        holder.name.setText(lesson.getShortName());
+        holder.name.setText(lesson.getShortname());
     }
 
     @Override

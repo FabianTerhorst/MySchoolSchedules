@@ -26,11 +26,11 @@ public class Lesson extends RealmObject {
         this.name = name;
     }
 
-    public String getShortName() {
+    public String getShortname() {
         return shortname;
     }
 
-    public void setShortName(String shortname) {
+    public void setShortname(String shortname) {
         this.shortname = shortname;
     }
 }
