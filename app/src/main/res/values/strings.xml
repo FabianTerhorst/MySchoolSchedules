@@ -4,9 +4,15 @@
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
 
+    <string name="drawer_timetable">Timetable</string>
     <string name="drawer_representations">Representations</string>
+    <string name="drawer_lessons">Lessons</string>
+    <string name="drawer_teacher">Teachers</string>
+    <string name="drawer_homework">Homework</string>
 
     <string name="no_representations">No Representations</string>
+
+    <string name="item_representation_lesson_content_description">lesson</string>
 
     <string name="class_name_hint">ITF2-13</string>
     <string name="ok">OK</string>

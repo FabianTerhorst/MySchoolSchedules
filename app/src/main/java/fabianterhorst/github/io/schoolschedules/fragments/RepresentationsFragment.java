@@ -60,7 +60,7 @@ public class RepresentationsFragment extends BaseFragment {
         return rowView;
     }
 
-    private void setAdapter(boolean refreshed) {
+    private void setAdapter(final boolean refreshed) {
         SchoolClass schoolClass = getDataStore().getCurrentSchoolClass();
         if (schoolClass != null) {
             addItems();
@@ -69,15 +69,15 @@ public class RepresentationsFragment extends BaseFragment {
                 public void onRepresentationsDataChange(List<Representation> representations) {
                     if (mSwipeRefreshLayout.isRefreshing())
                         mSwipeRefreshLayout.setRefreshing(false);
-                    addItems();
+                    addItems(refreshed);
                 }
             });
-            setRefreshing();
+            //setRefreshing();
             getDataStore().refreshClassRepresentations(schoolClass);
         } else if (refreshed) {
             mSuperRecyclerView.setAdapter(new RepresentationAdapter(new ArrayList<Representation>()));
         } else {
-            setRefreshing();
+            //setRefreshing();
         }
     }
 
@@ -94,10 +94,14 @@ public class RepresentationsFragment extends BaseFragment {
         setAdapter(false);
     }
 
-    private void addItems() {
+    private void addItems(boolean refreshed) {
         List<Representation> representations = getDataStore().getRepresentationsFromCurrentSchoolClass();
-        if (representations != null && representations.size() > 0)
+        if ((representations != null && representations.size() > 0) || refreshed)
             mSuperRecyclerView.setAdapter(new RepresentationAdapter(representations));
+    }
+
+    private void addItems(){
+        addItems(false);
     }
 
 }

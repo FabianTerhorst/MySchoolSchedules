@@ -16,6 +16,7 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -28,6 +29,7 @@ import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragmen
 
 public class MainActivity extends BaseActivity {
 
+   @SuppressWarnings("unused")
     private static String TAG = MainActivity.class.getName();
     private AccountHeader mHeader;
     private Drawer mDrawer;
@@ -70,21 +72,27 @@ public class MainActivity extends BaseActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .withFullscreen(true)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.drawer_representations).withIdentifier(1).withIcon(CommunityMaterial.Icon.cmd_view_dashboard).withSelectable(true)
+                        new PrimaryDrawerItem().withName(R.string.drawer_timetable).withIdentifier(1).withIcon(CommunityMaterial.Icon.cmd_timetable),
+                        new PrimaryDrawerItem().withName(R.string.drawer_representations).withIdentifier(2).withIcon(CommunityMaterial.Icon.cmd_image_filter_frames),
+                        new PrimaryDrawerItem().withName(R.string.drawer_lessons).withIdentifier(3).withIcon(CommunityMaterial.Icon.cmd_file_document_box),
+                        new PrimaryDrawerItem().withName(R.string.drawer_teacher).withIdentifier(4).withIcon(CommunityMaterial.Icon.cmd_school),
+                        new PrimaryDrawerItem().withName(R.string.drawer_homework).withIdentifier(5).withIcon(CommunityMaterial.Icon.cmd_clipboard_text).withBadgeStyle(new BadgeStyle().withColorRes(R.color.md_red_500).withTextColorRes(R.color.md_white_1000).withCorners(30)).withBadge("5")
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 
                     @Override
                     public boolean onItemClick(View view, int i, final IDrawerItem drawerItem) {
                         if (drawerItem != null) {
+                            mLastFragment = null;
                             switch (drawerItem.getIdentifier()) {
-                                case 1: {
+                                case 2: {
                                     mLastFragment = new RepresentationsFragment();
-                                    mFragmentManager.beginTransaction().replace(R.id.content_frame, mLastFragment).commit();
                                     break;
                                 }
-
                             }
+
+                            if(mLastFragment != null)
+                                mFragmentManager.beginTransaction().replace(R.id.content_frame, mLastFragment).commit();
 
                             if (drawerItem instanceof Nameable) {
                                 mToolbar.setTitle(((Nameable) drawerItem).getName().getText(MainActivity.this));
@@ -98,7 +106,7 @@ public class MainActivity extends BaseActivity {
                 .withSavedInstance(savedInstanceState)
                 .build();
 
-        mDrawer.setSelection(1);
+        mDrawer.setSelection(2);
 
         getDataStore().registerSchoolClassesDataChangeCallback(new DataStore.SchoolClassesDataChangeCallback() {
             @Override
@@ -120,13 +128,8 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    /**
-     * @param outState Bundle
-     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        //outState = mDrawer.saveInstanceState(outState);
-        //outState.putInt(DrawerIdentifier, mDrawer.getDrawerItems().get(mDrawer.getCurrentSelection()).getIdentifier());
         //add the values which need to be saved from the drawer to the bundle
         outState = mDrawer.saveInstanceState(outState);
         //add the values which need to be saved from the accountHeader to the bundle

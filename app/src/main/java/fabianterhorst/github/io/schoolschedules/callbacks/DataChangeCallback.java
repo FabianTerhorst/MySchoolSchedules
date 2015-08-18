@@ -28,4 +28,8 @@ public abstract class DataChangeCallback {
         Log.d(TAG, "Userdata changed");
     }
 
+    public void onTeacherDataChange() {
+        Log.d(TAG, "Teacher changed");
+    }
+
 }
