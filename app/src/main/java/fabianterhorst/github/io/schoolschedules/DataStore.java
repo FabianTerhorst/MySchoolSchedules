@@ -8,6 +8,7 @@ import java.util.List;
 import fabianterhorst.github.io.schoolschedules.adapter.RestApiAdapter;
 import fabianterhorst.github.io.schoolschedules.api.PictoriusApi;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
+import fabianterhorst.github.io.schoolschedules.models.Homework;
 import fabianterhorst.github.io.schoolschedules.models.Lesson;
 import fabianterhorst.github.io.schoolschedules.models.Representation;
 import fabianterhorst.github.io.schoolschedules.models.RepresentationResult;
@@ -65,6 +66,17 @@ public class DataStore {
         callLessonCallbacks();
     }
 
+    public void updateOrAddHomework(final Homework homework){
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                homework.setId(Math.round(realm.where(Homework.class).maximumInt("id") + 1));
+                realm.copyToRealmOrUpdate(homework);
+            }
+        });
+        callHomeworkCallbacks();
+    }
+
     public void deleteTeacherById(int id){
         getTeacherById(id).removeFromRealm();
         callTeacherCallbacks();
@@ -73,6 +85,11 @@ public class DataStore {
     public void deleteLessonById(int id){
         getLessonById(id).removeFromRealm();
         callLessonCallbacks();
+    }
+
+    public void deleteHomeworkById(int id){
+        getHomeworkById(id).removeFromRealm();
+        callHomeworkCallbacks();
     }
 
     public void refreshSchoolClasses() {
@@ -158,6 +175,11 @@ public class DataStore {
             dataChangeCallback.onLessonDataChange();
     }
 
+    public void callHomeworkCallbacks() {
+        for (DataChangeCallback dataChangeCallback : mCallbacks)
+            dataChangeCallback.onHomeworkDataChange();
+    }
+
     public void callCallbacks(SchoolClass schoolClass, List<Representation> representations) {
         for (DataChangeCallback dataChangeCallback : mCallbacks)
             if (dataChangeCallback.getClassName() != null)
@@ -193,12 +215,24 @@ public class DataStore {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).findAll();
     }
 
+    public RealmResults<Lesson> getLessons(){
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).findAll();
+    }
+
+    public RealmResults<Homework> getHomeworks(){
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).findAll();
+    }
+
     public Teacher getTeacherById(int id){
         return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).equalTo("id", id).findFirst();
     }
 
     public Lesson getLessonById(int id){
         return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).equalTo("id",id).findFirst();
+    }
+
+    public Homework getHomeworkById(int id){
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).equalTo("id",id).findFirst();
     }
 
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_note_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2.5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="2.5dp"
+    android:orientation="horizontal"
+    card_view:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_homework_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="#616161"
+            android:fontFamily="sans-serif-light"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Deutsch Inhaltsangabe" />
+
+        <TextView
+            android:id="@+id/item_homework_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#626262"
+            android:fontFamily="sans-serif-light"
+            android:textSize="17sp"
+            android:padding="10dp"
+            android:textStyle="normal"
+            tools:text="Inhaltsangabe schreiben und Sinnabschnitte bilden" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

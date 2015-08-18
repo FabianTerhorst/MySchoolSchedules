@@ -36,4 +36,8 @@ public abstract class DataChangeCallback {
         Log.d(TAG, "Lesson changed");
     }
 
+    public void onHomeworkDataChange() {
+        Log.d(TAG, "Homework changed");
+    }
+
 }
