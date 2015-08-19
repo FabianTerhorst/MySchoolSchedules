@@ -31,15 +31,23 @@ public class AddActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mType = type.valueOf(getIntent().getStringExtra(TYPE));
-        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
         LinearLayout container = new LinearLayout(this);
-        container.setLayoutParams(layoutParams);
+        container.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT)
+        );
         container.setOrientation(LinearLayout.VERTICAL);
+
         setContentView(container);
+
         View toolbarView = LayoutInflater.from(this).inflate(R.layout.toolbar, null);
         container.addView(toolbarView);
+
         Toolbar toolbar = (Toolbar) toolbarView.findViewById(R.id.toolbar);
         toolbar.setTitle(getToolbarTitle());
+
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {

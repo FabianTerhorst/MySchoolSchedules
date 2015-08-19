@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +40,7 @@ public class RecyclerViewFragment extends BaseFragment {
 
         mSwipeRefreshLayout = mSuperRecyclerView.getSwipeToRefresh();
 
-        mSuperRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mSuperRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getSpanCount()));
 
         mSuperRecyclerView.getRecyclerView().setPadding(0, 0, 0, UIUtils.getNavigationBarHeight(getActivity()));
 
@@ -74,6 +74,10 @@ public class RecyclerViewFragment extends BaseFragment {
             p.setMargins(l, t, r, b);
             v.requestLayout();
         }
+    }
+
+    public int getSpanCount(){
+        return 1;
     }
 
     public Intent getAddIntent() {
