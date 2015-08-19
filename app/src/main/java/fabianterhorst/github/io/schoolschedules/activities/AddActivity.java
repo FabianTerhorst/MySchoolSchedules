@@ -91,21 +91,21 @@ public class AddActivity extends BaseActivity {
                 Teacher teacher = new Teacher();
                 teacher.setSurname(mSurname.getEditableText().toString());
                 teacher.setSalutation(mSalutation.getEditableText().toString());
-                getDataStore().addTeacher(teacher);
+                getDataStore().add(teacher);
                 break;
             }
             case HOMEWORK: {
                 Homework homework = new Homework();
                 homework.setTitle(mTitle.getEditableText().toString());
                 homework.setDescription(mDescription.getEditableText().toString());
-                getDataStore().addHomework(homework);
+                getDataStore().add(homework);
                 break;
             }
             case LESSON: {
                 Lesson lesson = new Lesson();
                 lesson.setName(mName.getEditableText().toString());
                 lesson.setShortname(mShortname.getEditableText().toString());
-                getDataStore().addLesson(lesson);
+                getDataStore().add(lesson);
                 break;
             }
         }

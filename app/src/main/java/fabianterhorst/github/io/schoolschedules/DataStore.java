@@ -16,6 +16,7 @@ import fabianterhorst.github.io.schoolschedules.models.SchoolClass;
 import fabianterhorst.github.io.schoolschedules.models.SchoolClassResult;
 import fabianterhorst.github.io.schoolschedules.models.Teacher;
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -44,117 +45,72 @@ public class DataStore {
             mSchoolClassName = app.getUserClassName();
     }
 
-    public void addTeacher(final Teacher teacher) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                teacher.setId(realm.where(Teacher.class).maximumInt("id") + 1);
-                realm.copyToRealmOrUpdate(teacher);
-            }
-        });
-        callTeacherCallbacks();
-    }
-
-    public void updateTeacher(final Teacher teacher) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(teacher);
-            }
-        });
-        callTeacherCallbacks();
-    }
-
-    public void addLesson(final Lesson lesson) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                lesson.setId(realm.where(Lesson.class).maximumInt("id") + 1);
-                realm.copyToRealmOrUpdate(lesson);
-            }
-        });
-        callLessonCallbacks();
-    }
-
-    public void updateLesson(final Lesson lesson) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(lesson);
-            }
-        });
-        callLessonCallbacks();
-    }
-
-    public void addHomework(final Homework homework) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                homework.setId(realm.where(Homework.class).maximumInt("id") + 1);
-                realm.copyToRealmOrUpdate(homework);
-            }
-        });
-        callHomeworkCallbacks();
-    }
-
-    public void updateHomework(final Homework homework) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(homework);
-            }
-        });
-        callHomeworkCallbacks();
-    }
-
     public void deleteTeacherById(long id) {
-        deleteTeacher(getTeacherById(id));
-        callTeacherCallbacks();
-    }
-
-    public void deleteTeacher(final Teacher teacher) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                teacher.removeFromRealm();
-            }
-        });
-        callTeacherCallbacks();
+        delete(getTeacherById(id));
     }
 
     public void deleteLessonById(long id) {
-        deleteLesson(getLessonById(id));
-        callLessonCallbacks();
-    }
-
-    public void deleteLesson(final Lesson lesson) {
-        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                lesson.removeFromRealm();
-            }
-        });
-        callLessonCallbacks();
+        delete(getLessonById(id));
     }
 
     public void deleteHomeworkById(long id) {
-        deleteHomework(getHomeworkById(id));
-        callHomeworkCallbacks();
+        delete(getHomeworkById(id));
     }
 
     public void deleteHomeworkByPosition(int position) {
-        deleteHomework(getHomeworks().get(position));
-        callHomeworkCallbacks();
+        delete(getHomeworks().get(position));
     }
 
-    public void deleteHomework(final Homework homework) {
+    public void callCallbacks(RealmObject realmObject){
+        if(realmObject instanceof Teacher){
+            callTeacherCallbacks();
+        }else if(realmObject instanceof Lesson){
+            callLessonCallbacks();
+        }else if(realmObject instanceof Homework){
+            callHomeworkCallbacks();
+        }
+    }
+
+    public void delete(final RealmObject realmObject){
         SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                homework.removeFromRealm();
+                realmObject.removeFromRealm();
             }
         });
-        callHomeworkCallbacks();
+        callCallbacks(realmObject);
+    }
+
+    public void add(final RealmObject realmObject){
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if(realmObject instanceof Teacher) {
+                    Teacher teacher = (Teacher) realmObject;
+                    teacher.setId(realm.where(Teacher.class).maximumInt("id") + 1);
+                    realm.copyToRealmOrUpdate(teacher);
+                }else if(realmObject instanceof Lesson) {
+                    Lesson lesson = (Lesson) realmObject;
+                    lesson.setId(realm.where(Lesson.class).maximumInt("id") + 1);
+                    realm.copyToRealmOrUpdate(lesson);
+                }else if(realmObject instanceof Homework) {
+                    Homework homework = (Homework) realmObject;
+                    homework.setId(realm.where(Homework.class).maximumInt("id") + 1);
+                    realm.copyToRealmOrUpdate(homework);
+                }
+            }
+        });
+        callCallbacks(realmObject);
+    }
+
+    public void update(final RealmObject realmObject) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(realmObject);
+            }
+        });
+        callCallbacks(realmObject);
     }
 
     public void refreshSchoolClasses() {
