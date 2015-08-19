@@ -32,18 +32,32 @@ import fabianterhorst.github.io.schoolschedules.fragments.TeachersFragment;
 
 public class MainActivity extends BaseActivity {
 
-   @SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     private static String TAG = MainActivity.class.getName();
     private AccountHeader mHeader;
     private Drawer mDrawer;
     private Toolbar mToolbar;
     private Fragment mLastFragment;
     private FragmentManager mFragmentManager;
+    public static final String STARTFRAGMENT = "startfragment";
+
+    public enum startfragment {
+        TEACHER, HOMEWORK, LESSON
+    }
+
+    private startfragment mStartFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (getIntent() != null) {
+            String startFragment = getIntent().getStringExtra(STARTFRAGMENT);
+            if (startFragment != null) {
+                mStartFragment = startfragment.valueOf(startFragment.toUpperCase());
+            }
+        }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -124,7 +138,28 @@ public class MainActivity extends BaseActivity {
                 .withSavedInstance(savedInstanceState)
                 .build();
 
-        mDrawer.setSelection(2);
+        if (mStartFragment != null) {
+            switch (mStartFragment) {
+                case TEACHER: {
+                    mDrawer.setSelection(4);
+                    break;
+                }
+                case HOMEWORK: {
+                    mDrawer.setSelection(5);
+                    break;
+                }
+                case LESSON: {
+                    mDrawer.setSelection(3);
+                    break;
+                }
+                default: {
+                    mDrawer.setSelection(2);
+                    break;
+                }
+            }
+        } else {
+            mDrawer.setSelection(2);
+        }
 
         getDataStore().registerSchoolClassesDataChangeCallback(new DataStore.SchoolClassesDataChangeCallback() {
             @Override
@@ -138,8 +173,8 @@ public class MainActivity extends BaseActivity {
         getDataStore().refreshSchoolClasses();
     }
 
-    private void updateProfile(){
-        if(getDataStore().getCurrentSchoolClass() != null) {
+    private void updateProfile() {
+        if (getDataStore().getCurrentSchoolClass() != null) {
             IProfile profileDrawerItem = mHeader.getActiveProfile();
             profileDrawerItem.withName(getDataStore().getCurrentSchoolClass().getClass_name());
             mHeader.updateProfileByIdentifier(profileDrawerItem);

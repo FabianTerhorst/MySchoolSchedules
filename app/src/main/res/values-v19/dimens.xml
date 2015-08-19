@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="navigation_bar_bottom_padding">48dp</dimen>
+    <dimen name="navigation_bar_fab_bottom_padding">58dp</dimen>
+
+</resources>

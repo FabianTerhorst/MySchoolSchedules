@@ -37,57 +37,87 @@ public class DataStore {
         setSchoolClassName();
     }
 
-    public void setSchoolClassName(){
+    public void setSchoolClassName() {
         //check if user object set in database
         SchoolSchedulesApplication app = SchoolSchedulesApplication.getInstance();
-        if(app.getUser() != null)
+        if (app.getUser() != null)
             mSchoolClassName = app.getUserClassName();
     }
 
-    public void updateOrAddTeacher(final Teacher teacher){
+    public void addTeacher(final Teacher teacher) {
         SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                teacher.setId(Math.round(realm.where(Teacher.class).maximumInt("id") + 1));
+                teacher.setId(realm.where(Teacher.class).maximumInt("id") + 1);
                 realm.copyToRealmOrUpdate(teacher);
             }
         });
         callTeacherCallbacks();
     }
 
-    public void updateOrAddLesson(final Lesson lesson){
+    public void updateTeacher(final Teacher teacher) {
         SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                lesson.setId(Math.round(realm.where(Lesson.class).maximumInt("id") + 1));
+                realm.copyToRealmOrUpdate(teacher);
+            }
+        });
+        callTeacherCallbacks();
+    }
+
+    public void addLesson(final Lesson lesson) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                lesson.setId(realm.where(Lesson.class).maximumInt("id") + 1);
                 realm.copyToRealmOrUpdate(lesson);
             }
         });
         callLessonCallbacks();
     }
 
-    public void updateOrAddHomework(final Homework homework){
+    public void updateLesson(final Lesson lesson) {
         SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                homework.setId(Math.round(realm.where(Homework.class).maximumInt("id") + 1));
+                realm.copyToRealmOrUpdate(lesson);
+            }
+        });
+        callLessonCallbacks();
+    }
+
+    public void addHomework(final Homework homework) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                homework.setId(realm.where(Homework.class).maximumInt("id") + 1);
                 realm.copyToRealmOrUpdate(homework);
             }
         });
         callHomeworkCallbacks();
     }
 
-    public void deleteTeacherById(int id){
+    public void updateHomework(final Homework homework) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(homework);
+            }
+        });
+        callHomeworkCallbacks();
+    }
+
+    public void deleteTeacherById(int id) {
         getTeacherById(id).removeFromRealm();
         callTeacherCallbacks();
     }
 
-    public void deleteLessonById(int id){
+    public void deleteLessonById(int id) {
         getLessonById(id).removeFromRealm();
         callLessonCallbacks();
     }
 
-    public void deleteHomeworkById(int id){
+    public void deleteHomeworkById(int id) {
         getHomeworkById(id).removeFromRealm();
         callHomeworkCallbacks();
     }
@@ -156,7 +186,7 @@ public class DataStore {
         mCallbacks.add(dataChangeCallback);
     }
 
-    public void registerDataChangeCallbackForCurrentSchoolClass(DataChangeCallback dataChangeCallback){
+    public void registerDataChangeCallbackForCurrentSchoolClass(DataChangeCallback dataChangeCallback) {
         registerDataChangeCallbackForSchoolClassName(mSchoolClassName, dataChangeCallback);
     }
 
@@ -199,7 +229,7 @@ public class DataStore {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Representation.class).equalTo("class_name", className).findAll();
     }
 
-    public RealmResults<Representation> getRepresentationsFromCurrentSchoolClass(){
+    public RealmResults<Representation> getRepresentationsFromCurrentSchoolClass() {
         return getRepresentationsByClassName(mSchoolClassName);
     }
 
@@ -207,32 +237,32 @@ public class DataStore {
         return SchoolSchedulesApplication.getInstance().getRealm().where(SchoolClass.class).equalTo("class_name", name).findFirst();
     }
 
-    public SchoolClass getCurrentSchoolClass(){
+    public SchoolClass getCurrentSchoolClass() {
         return getSchoolClassByName(mSchoolClassName);
     }
 
-    public RealmResults<Teacher> getTeachers(){
+    public RealmResults<Teacher> getTeachers() {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).findAll();
     }
 
-    public RealmResults<Lesson> getLessons(){
+    public RealmResults<Lesson> getLessons() {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).findAll();
     }
 
-    public RealmResults<Homework> getHomeworks(){
+    public RealmResults<Homework> getHomeworks() {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).findAll();
     }
 
-    public Teacher getTeacherById(int id){
+    public Teacher getTeacherById(int id) {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).equalTo("id", id).findFirst();
     }
 
-    public Lesson getLessonById(int id){
-        return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).equalTo("id",id).findFirst();
+    public Lesson getLessonById(int id) {
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).equalTo("id", id).findFirst();
     }
 
-    public Homework getHomeworkById(int id){
-        return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).equalTo("id",id).findFirst();
+    public Homework getHomeworkById(int id) {
+        return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).equalTo("id", id).findFirst();
     }
 
 }
