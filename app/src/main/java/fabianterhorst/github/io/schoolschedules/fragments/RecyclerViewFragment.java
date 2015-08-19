@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class RecyclerViewFragment extends BaseFragment {
 
         mSwipeRefreshLayout = mSuperRecyclerView.getSwipeToRefresh();
 
-        mSuperRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),getSpanCount()));
+        mSuperRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getSpanCount()));
 
         mSuperRecyclerView.getRecyclerView().setPadding(0, 0, 0, UIUtils.getNavigationBarHeight(getActivity()));
 
@@ -64,6 +65,22 @@ public class RecyclerViewFragment extends BaseFragment {
                 startActivity(getAddIntent());
             }
         });
+
+        if(hasSwipeToDismiss()) {
+            ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                    deleteByPosition(viewHolder.getAdapterPosition());
+                }
+            });
+            swipeToDismissTouchHelper.attachToRecyclerView(mSuperRecyclerView.getRecyclerView());
+        }
 
         return rowView;
     }
@@ -118,5 +135,13 @@ public class RecyclerViewFragment extends BaseFragment {
         Intent intent = new Intent(getActivity(), AddActivity.class);
         intent.putExtra(AddActivity.TYPE, type.toString().toUpperCase());
         return intent;
+    }
+
+    public boolean hasSwipeToDismiss(){
+        return false;
+    }
+
+    public void deleteByPosition(int position){
+
     }
 }

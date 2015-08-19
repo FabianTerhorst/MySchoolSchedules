@@ -34,4 +34,14 @@ public class HomeworksFragment extends RecyclerViewFragment {
     public Intent getAddIntent() {
         return createAddIntent(AddActivity.type.HOMEWORK);
     }
+
+    @Override
+    public boolean hasSwipeToDismiss() {
+        return true;
+    }
+
+    @Override
+    public void deleteByPosition(int position) {
+        getDataStore().deleteHomeworkByPosition(position);
+    }
 }

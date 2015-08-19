@@ -107,18 +107,53 @@ public class DataStore {
         callHomeworkCallbacks();
     }
 
-    public void deleteTeacherById(int id) {
-        getTeacherById(id).removeFromRealm();
+    public void deleteTeacherById(long id) {
+        deleteTeacher(getTeacherById(id));
         callTeacherCallbacks();
     }
 
-    public void deleteLessonById(int id) {
-        getLessonById(id).removeFromRealm();
+    public void deleteTeacher(final Teacher teacher) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                teacher.removeFromRealm();
+            }
+        });
+        callTeacherCallbacks();
+    }
+
+    public void deleteLessonById(long id) {
+        deleteLesson(getLessonById(id));
         callLessonCallbacks();
     }
 
-    public void deleteHomeworkById(int id) {
-        getHomeworkById(id).removeFromRealm();
+    public void deleteLesson(final Lesson lesson) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                lesson.removeFromRealm();
+            }
+        });
+        callLessonCallbacks();
+    }
+
+    public void deleteHomeworkById(long id) {
+        deleteHomework(getHomeworkById(id));
+        callHomeworkCallbacks();
+    }
+
+    public void deleteHomeworkByPosition(int position) {
+        deleteHomework(getHomeworks().get(position));
+        callHomeworkCallbacks();
+    }
+
+    public void deleteHomework(final Homework homework) {
+        SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                homework.removeFromRealm();
+            }
+        });
         callHomeworkCallbacks();
     }
 
@@ -253,15 +288,15 @@ public class DataStore {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).findAll();
     }
 
-    public Teacher getTeacherById(int id) {
+    public Teacher getTeacherById(long id) {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Teacher.class).equalTo("id", id).findFirst();
     }
 
-    public Lesson getLessonById(int id) {
+    public Lesson getLessonById(long id) {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Lesson.class).equalTo("id", id).findFirst();
     }
 
-    public Homework getHomeworkById(int id) {
+    public Homework getHomeworkById(long id) {
         return SchoolSchedulesApplication.getInstance().getRealm().where(Homework.class).equalTo("id", id).findFirst();
     }
 
