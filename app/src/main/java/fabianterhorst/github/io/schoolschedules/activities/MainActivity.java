@@ -25,6 +25,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import fabianterhorst.github.io.schoolschedules.R;
+import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
 import fabianterhorst.github.io.schoolschedules.fragments.HomeworksFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.LessonsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragment;
@@ -165,6 +166,13 @@ public class MainActivity extends BaseActivity {
         setToolbarTitleForSelection();
 
         updateHomeworkBadge();
+
+        getDataStore().registerDataChangeCallback(new DataChangeCallback() {
+            @Override
+            public void onHomeworkDataChange() {
+                updateHomeworkBadge();
+            }
+        });
     }
 
     private void setToolbarTitleForSelection() {

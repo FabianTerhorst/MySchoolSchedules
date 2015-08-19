@@ -28,6 +28,10 @@ public class SchoolSchedulesApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mSingleInstance = this;
+        mSingleInstance.initializeInstance();
+    }
+
+    protected void initializeInstance(){
         Iconics.init(getApplicationContext());
         Iconics.registerFont(new CommunityMaterial());
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
