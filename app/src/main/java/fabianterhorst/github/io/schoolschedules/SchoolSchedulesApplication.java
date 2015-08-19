@@ -97,7 +97,13 @@ public class SchoolSchedulesApplication extends Application {
     public void logout() {
         //clear all user settings
         clearSettings();
-        mRealm.where(User.class).findAll().clear();
+        final User user = mRealm.where(User.class).findFirst();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                user.removeFromRealm();
+            }
+        });
         Intent intent = new Intent(this, getSplashActivity().getClass());
         intent.addFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

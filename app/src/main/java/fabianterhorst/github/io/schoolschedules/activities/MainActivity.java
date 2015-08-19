@@ -3,7 +3,6 @@ package fabianterhorst.github.io.schoolschedules.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +24,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
-import fabianterhorst.github.io.schoolschedules.DataStore;
 import fabianterhorst.github.io.schoolschedules.R;
 import fabianterhorst.github.io.schoolschedules.fragments.HomeworksFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.LessonsFragment;
@@ -75,7 +73,7 @@ public class MainActivity extends BaseActivity {
                 .withSelectionListEnabled(false)
                 .withHeaderBackground(R.drawable.material_drawer_shadow_top)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("").withEmail("").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_account_circle).color(Color.WHITE).sizeDp(IconicsDrawable.ANDROID_ACTIONBAR_ICON_SIZE_DP)).withEnabled(false).withIdentifier(1)
+                        new ProfileDrawerItem().withName("").withEmail(getSchoolSchedulesApplication().getUserClassName()).withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_account_circle).color(Color.WHITE).sizeDp(IconicsDrawable.ANDROID_ACTIONBAR_ICON_SIZE_DP)).withEnabled(false).withIdentifier(1)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -166,35 +164,12 @@ public class MainActivity extends BaseActivity {
         }
         setToolbarTitleForSelection();
 
-        getDataStore().registerSchoolClassesDataChangeCallback(new DataStore.SchoolClassesDataChangeCallback() {
-            @Override
-            public void onSchoolClassesDataChange() {
-                updateProfile();
-            }
-        });
-
-        updateProfile();
-
         updateHomeworkBadge();
-
-        getDataStore().refreshSchoolClasses();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            getWindow().setNavigationBarColor(Color.parseColor("#80000000"));
-    }
-
-    private void updateProfile() {
-        if (getDataStore().getCurrentSchoolClass() != null) {
-            IProfile profileDrawerItem = mHeader.getActiveProfile();
-            profileDrawerItem.withName(getDataStore().getCurrentSchoolClass().getClass_name());
-            profileDrawerItem.withEmail(getSchoolSchedulesApplication().getUserClassName());
-            mHeader.updateProfileByIdentifier(profileDrawerItem);
-        }
     }
 
     private void setToolbarTitleForSelection() {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null && mDrawer != null)
+        if (actionBar != null)
             switch (mDrawer.getCurrentSelection()) {
                 case 1: {
                     actionBar.setTitle(getString(R.string.drawer_timetable));
