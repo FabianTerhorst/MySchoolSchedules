@@ -3,7 +3,9 @@ package fabianterhorst.github.io.schoolschedules.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +31,8 @@ import fabianterhorst.github.io.schoolschedules.fragments.HomeworksFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.LessonsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.TeachersFragment;
+import fabianterhorst.github.io.schoolschedules.models.Homework;
+import io.realm.RealmResults;
 
 public class MainActivity extends BaseActivity {
 
@@ -160,6 +164,7 @@ public class MainActivity extends BaseActivity {
         } else {
             mDrawer.setSelection(2);
         }
+        setToolbarTitleForSelection();
 
         getDataStore().registerSchoolClassesDataChangeCallback(new DataStore.SchoolClassesDataChangeCallback() {
             @Override
@@ -170,14 +175,59 @@ public class MainActivity extends BaseActivity {
 
         updateProfile();
 
+        updateHomeworkBadge();
+
         getDataStore().refreshSchoolClasses();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setNavigationBarColor(Color.parseColor("#80000000"));
     }
 
     private void updateProfile() {
         if (getDataStore().getCurrentSchoolClass() != null) {
             IProfile profileDrawerItem = mHeader.getActiveProfile();
             profileDrawerItem.withName(getDataStore().getCurrentSchoolClass().getClass_name());
+            profileDrawerItem.withEmail(getSchoolSchedulesApplication().getUserClassName());
             mHeader.updateProfileByIdentifier(profileDrawerItem);
+        }
+    }
+
+    private void setToolbarTitleForSelection() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null && mDrawer != null)
+            switch (mDrawer.getCurrentSelection()) {
+                case 1: {
+                    actionBar.setTitle(getString(R.string.drawer_timetable));
+                    break;
+                }
+                case 2: {
+                    actionBar.setTitle(getString(R.string.drawer_representations));
+                    break;
+                }
+                case 3: {
+                    actionBar.setTitle(getString(R.string.drawer_lessons));
+                    break;
+                }
+                case 4: {
+                    actionBar.setTitle(getString(R.string.drawer_teacher));
+                    break;
+                }
+                case 5: {
+                    actionBar.setTitle(getString(R.string.drawer_homework));
+                    break;
+                }
+            }
+    }
+
+    private void updateHomeworkBadge() {
+        PrimaryDrawerItem drawerItem = (PrimaryDrawerItem) mDrawer.getDrawerItem(5);
+        RealmResults<Homework> homeworks = getDataStore().getHomeworks();
+        if (homeworks != null && drawerItem != null) {
+            drawerItem.withBadgeStyle(new BadgeStyle()
+                    .withColorRes(R.color.md_red_500)
+                    .withTextColorRes(R.color.md_white_1000).withCorners(30))
+                    .withBadge(Integer.toString(homeworks.size()));
+            mDrawer.updateItem(drawerItem);
         }
     }
 

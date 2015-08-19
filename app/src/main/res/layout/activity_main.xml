@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/abc_action_bar_default_height_material"
             app:popupTheme="@style/Theme.AppCompat.NoActionBar" />
-        <!--android:theme="@style/ActionBarThemeOverlay"-->
 
     </android.support.design.widget.AppBarLayout>
 
