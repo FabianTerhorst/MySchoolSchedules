@@ -10,11 +10,13 @@
     <string name="drawer_lessons">Lessons</string>
     <string name="drawer_teacher">Teachers</string>
     <string name="drawer_homework">Homework</string>
+    <string name="drawer_classgroup">Classgroup</string>
 
     <string name="no_representations">No Representations</string>
     <string name="no_teachers">No Teachers</string>
     <string name="no_homeworks">No Homeworks :)</string>
     <string name="no_lessons">No Lessons</string>
+    <string name="no_class_groups">No Class Groups</string>
 
     <string name="add_teacher">Add Teacher</string>
     <string name="add_homework">Add Homework</string>

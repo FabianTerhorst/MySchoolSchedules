@@ -1,5 +1,7 @@
 package fabianterhorst.github.io.schoolschedules;
 
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -45,7 +47,6 @@ public class DataStore {
     public DataStore() {
         mCallbacks = new ArrayList<>();
         mSchoolClassesCallbacks = new ArrayList<>();
-        //setSchoolClassName();
         load();
     }
 
@@ -82,7 +83,7 @@ public class DataStore {
         return null;
     }
 
-    public void createClassGroup(ClassGroup classGroup) {
+    public void createClassGroup(ClassGroup classGroup, final Handler handler) {
         final SchoolSchedulesApplication app = SchoolSchedulesApplication.getInstance();
         Firebase classes = app.getFirebase().child("classes").child(classGroup.getName());
         classes.setValue(classGroup, new Firebase.CompletionListener() {
@@ -90,21 +91,29 @@ public class DataStore {
             public void onComplete(FirebaseError error, Firebase firebase) {
                 if(error != null){
                     Toast.makeText(app, error.getMessage(), Toast.LENGTH_LONG).show();
+                }else {
+                    Message message = new Message();
+                    handler.dispatchMessage(message);
                 }
             }
         });
     }
 
-    public void getClassGroups() {
+    public void getClassGroups(final Handler handler) {
         Firebase classes = SchoolSchedulesApplication.getInstance().getFirebase().child("classes");
         classes.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println(snapshot.getValue());
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                ArrayList<ClassGroup> classGroups = new ArrayList<>();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     ClassGroup classGroup = postSnapshot.getValue(ClassGroup.class);
-                    System.out.println(classGroup.getName() + " - " + classGroup.getShortname());
+                    //System.out.println(classGroup.getName() + " - " + classGroup.getShortname());
+                    classGroups.add(classGroup);
                 }
+                Message message = new Message();
+                message.obj = classGroups;
+                handler.dispatchMessage(message);
             }
 
             @Override
@@ -112,6 +121,29 @@ public class DataStore {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
+    }
+
+    public void getOwnClassGroups(final Handler handler){
+        getClassGroups(new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                ArrayList<ClassGroup> ownClassGroups = new ArrayList<>();
+                if(msg.obj != null) {
+                    ArrayList<ClassGroup> classGroups = (ArrayList<ClassGroup>)msg.obj;
+                    for (ClassGroup classGroup : classGroups){
+                        if(classGroup.getMember().contains(getUser().getEmail())){
+                            ownClassGroups.add(classGroup);
+                        }
+                    }
+                    if(handler != null){
+                        Message message = new Message();
+                        message.obj = ownClassGroups;
+                        handler.dispatchMessage(message);
+                    }
+                }
+                return false;
+            }
+        }));
     }
 
     public boolean isLoggedIn() {

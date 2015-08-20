@@ -34,4 +34,5 @@ public class User extends RealmObject{
     public void setClassName(String className) {
         this.className = className;
     }
+
 }

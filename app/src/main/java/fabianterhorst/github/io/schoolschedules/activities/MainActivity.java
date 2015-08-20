@@ -26,6 +26,7 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import fabianterhorst.github.io.schoolschedules.R;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
+import fabianterhorst.github.io.schoolschedules.fragments.ClassGroupsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.HomeworksFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.LessonsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.TeachersFragment;
@@ -93,9 +94,10 @@ public class MainActivity extends BaseActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_timetable).withIdentifier(1).withIcon(CommunityMaterial.Icon.cmd_timetable),
                         new PrimaryDrawerItem().withName(R.string.drawer_representations).withIdentifier(2).withIcon(CommunityMaterial.Icon.cmd_image_filter_frames),
-                        new PrimaryDrawerItem().withName(R.string.drawer_lessons).withIdentifier(3).withIcon(CommunityMaterial.Icon.cmd_clipboard_text),
-                        new PrimaryDrawerItem().withName(R.string.drawer_teacher).withIdentifier(4).withIcon(CommunityMaterial.Icon.cmd_school),
-                        new PrimaryDrawerItem().withName(R.string.drawer_homework).withIdentifier(5).withIcon(CommunityMaterial.Icon.cmd_pencil).withBadgeStyle(new BadgeStyle().withColorRes(R.color.md_red_500).withTextColorRes(R.color.md_white_1000).withCorners(30)).withBadge("5")
+                        new PrimaryDrawerItem().withName(R.string.drawer_classgroup).withIdentifier(3).withIcon(CommunityMaterial.Icon.cmd_clipboard_text),
+                        new PrimaryDrawerItem().withName(R.string.drawer_lessons).withIdentifier(4).withIcon(CommunityMaterial.Icon.cmd_clipboard_text),
+                        new PrimaryDrawerItem().withName(R.string.drawer_teacher).withIdentifier(5).withIcon(CommunityMaterial.Icon.cmd_school),
+                        new PrimaryDrawerItem().withName(R.string.drawer_homework).withIdentifier(6).withIcon(CommunityMaterial.Icon.cmd_pencil).withBadgeStyle(new BadgeStyle().withColorRes(R.color.md_red_500).withTextColorRes(R.color.md_white_1000).withCorners(30)).withBadge("5")
                 )
                 .withCloseOnClick(true)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -110,14 +112,18 @@ public class MainActivity extends BaseActivity {
                                     break;
                                 }
                                 case 3: {
-                                    mLastFragment = new LessonsFragment();
+                                    mLastFragment = new ClassGroupsFragment();
                                     break;
                                 }
                                 case 4: {
-                                    mLastFragment = new TeachersFragment();
+                                    mLastFragment = new LessonsFragment();
                                     break;
                                 }
                                 case 5: {
+                                    mLastFragment = new TeachersFragment();
+                                    break;
+                                }
+                                case 6: {
                                     mLastFragment = new HomeworksFragment();
                                     break;
                                 }

@@ -4,7 +4,7 @@ public class SplashActivity extends AbstractSplashActivity {
 
     @Override
     public Class<?> getTarget() {
-        return MainActivity.class;
+        return getSchoolSchedulesApplication().getSettingsBool("group_add",false)?MainActivity.class:AddClassGroup.class;
     }
 
 }

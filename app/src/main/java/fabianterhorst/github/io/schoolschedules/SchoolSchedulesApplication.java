@@ -38,7 +38,7 @@ public class SchoolSchedulesApplication extends Application {
         mSingleInstance.initializeInstance();
     }
 
-    protected void initializeInstance(){
+    protected void initializeInstance() {
         Firebase.setAndroidContext(this);
         Iconics.init(getApplicationContext());
         Iconics.registerFont(new CommunityMaterial());
@@ -51,8 +51,8 @@ public class SchoolSchedulesApplication extends Application {
         return mDataStore;
     }
 
-    public Firebase getFirebase(){
-        if(mFirebase == null)
+    public Firebase getFirebase() {
+        if (mFirebase == null)
             mFirebase = new Firebase("https://flickering-heat-6338.firebaseio.com/");
         return mFirebase;
     }
@@ -121,7 +121,7 @@ public class SchoolSchedulesApplication extends Application {
         //clear all user settings
         clearSettings();
         Intent intent = new Intent(this, getSplashActivity().getClass());
-        intent.addFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -131,14 +131,24 @@ public class SchoolSchedulesApplication extends Application {
         editor.apply();
     }
 
-    public void setSettingsString(String key, String value){
+    public void setSettingsString(String key, String value) {
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putString(key, value);
         editor.apply();
     }
 
-    public String getSettingsString(String key){
+    public String getSettingsString(String key) {
         return mSettings.getString(key, "");
+    }
+
+    public boolean getSettingsBool(String key, boolean defaultBoolean) {
+        return mSettings.getBoolean(key, defaultBoolean);
+    }
+
+    public void setSettingsBool(String key, boolean bool){
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putBoolean(key, bool);
+        editor.apply();
     }
 
 }
