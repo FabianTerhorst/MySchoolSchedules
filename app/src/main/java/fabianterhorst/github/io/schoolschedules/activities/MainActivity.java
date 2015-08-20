@@ -28,7 +28,6 @@ import fabianterhorst.github.io.schoolschedules.R;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
 import fabianterhorst.github.io.schoolschedules.fragments.HomeworksFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.LessonsFragment;
-import fabianterhorst.github.io.schoolschedules.fragments.RepresentationsFragment;
 import fabianterhorst.github.io.schoolschedules.fragments.TeachersFragment;
 import fabianterhorst.github.io.schoolschedules.models.Homework;
 import io.realm.RealmResults;
@@ -74,7 +73,7 @@ public class MainActivity extends BaseActivity {
                 .withSelectionListEnabled(false)
                 .withHeaderBackground(R.drawable.material_drawer_shadow_top)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("").withEmail(getSchoolSchedulesApplication().getUserClassName()).withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_account_circle).color(Color.WHITE).sizeDp(IconicsDrawable.ANDROID_ACTIONBAR_ICON_SIZE_DP)).withEnabled(false).withIdentifier(1)
+                        new ProfileDrawerItem().withName("").withEmail("").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_account_circle).color(Color.WHITE).sizeDp(IconicsDrawable.ANDROID_ACTIONBAR_ICON_SIZE_DP)).withEnabled(false).withIdentifier(1)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -94,9 +93,9 @@ public class MainActivity extends BaseActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_timetable).withIdentifier(1).withIcon(CommunityMaterial.Icon.cmd_timetable),
                         new PrimaryDrawerItem().withName(R.string.drawer_representations).withIdentifier(2).withIcon(CommunityMaterial.Icon.cmd_image_filter_frames),
-                        new PrimaryDrawerItem().withName(R.string.drawer_lessons).withIdentifier(3).withIcon(CommunityMaterial.Icon.cmd_file_document_box),
+                        new PrimaryDrawerItem().withName(R.string.drawer_lessons).withIdentifier(3).withIcon(CommunityMaterial.Icon.cmd_clipboard_text),
                         new PrimaryDrawerItem().withName(R.string.drawer_teacher).withIdentifier(4).withIcon(CommunityMaterial.Icon.cmd_school),
-                        new PrimaryDrawerItem().withName(R.string.drawer_homework).withIdentifier(5).withIcon(CommunityMaterial.Icon.cmd_clipboard_text).withBadgeStyle(new BadgeStyle().withColorRes(R.color.md_red_500).withTextColorRes(R.color.md_white_1000).withCorners(30)).withBadge("5")
+                        new PrimaryDrawerItem().withName(R.string.drawer_homework).withIdentifier(5).withIcon(CommunityMaterial.Icon.cmd_pencil).withBadgeStyle(new BadgeStyle().withColorRes(R.color.md_red_500).withTextColorRes(R.color.md_white_1000).withCorners(30)).withBadge("5")
                 )
                 .withCloseOnClick(true)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -107,7 +106,7 @@ public class MainActivity extends BaseActivity {
                             mLastFragment = null;
                             switch (drawerItem.getIdentifier()) {
                                 case 2: {
-                                    mLastFragment = new RepresentationsFragment();
+                                    //mLastFragment = new RepresentationsFragment();
                                     break;
                                 }
                                 case 3: {

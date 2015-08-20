@@ -21,7 +21,6 @@ public abstract class AbstractSplashActivity extends BaseActivity {
 
         getSchoolSchedulesApplication().setSplashActivity(this);
 
-        //final EditText className = (EditText) findViewById(R.id.className);
         final EditText userName = (EditText) findViewById(R.id.userName);
         final EditText password = (EditText) findViewById(R.id.password);
 
@@ -45,9 +44,8 @@ public abstract class AbstractSplashActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "start");
-        //User user = SchoolSchedulesApplication.getInstance().getUser();
-        //if (user != null)
-        //    boot();
+        if(getDataStore().isLoggedIn())
+            boot();
     }
 
     private void boot() {

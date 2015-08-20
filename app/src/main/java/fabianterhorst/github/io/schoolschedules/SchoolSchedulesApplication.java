@@ -53,7 +53,7 @@ public class SchoolSchedulesApplication extends Application {
 
     public Firebase getFirebase(){
         if(mFirebase == null)
-            mFirebase = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com/");
+            mFirebase = new Firebase("https://flickering-heat-6338.firebaseio.com/");
         return mFirebase;
     }
 
@@ -84,25 +84,18 @@ public class SchoolSchedulesApplication extends Application {
     }
 
     public void register(final String userName, final String password) {
-        /*getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealm(new User("bla"));
-            }
-        });*/
         SimpleLogin authClient = new SimpleLogin(getFirebase(), this);
         authClient.createUser(userName, password, new SimpleLoginAuthenticatedHandler() {
             public void authenticated(FirebaseSimpleLoginError error, FirebaseSimpleLoginUser user) {
                 if (error != null) {
                     // There was an error creating this account
-                    Toast.makeText(SchoolSchedulesApplication.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(SchoolSchedulesApplication.this, error.getCode() + " " + error.getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     // We created a new user account
                     getDataStore().setUser(user);
                 }
             }
         });
-        //getDataStore().callUserCallbacks();
     }
 
     public void setSplashActivity(Activity activity) {
@@ -127,13 +120,6 @@ public class SchoolSchedulesApplication extends Application {
     public void logout() {
         //clear all user settings
         clearSettings();
-        final User user = mRealm.where(User.class).findFirst();
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                user.removeFromRealm();
-            }
-        });
         Intent intent = new Intent(this, getSplashActivity().getClass());
         intent.addFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -147,8 +133,12 @@ public class SchoolSchedulesApplication extends Application {
 
     public void setSettingsString(String key, String value){
         SharedPreferences.Editor editor = mSettings.edit();
-        editor.clear();editor.putString(key, value);
+        editor.putString(key, value);
         editor.apply();
+    }
+
+    public String getSettingsString(String key){
+        return mSettings.getString(key, "");
     }
 
 }

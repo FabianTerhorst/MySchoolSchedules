@@ -2,6 +2,10 @@ package fabianterhorst.github.io.schoolschedules;
 
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.firebase.simplelogin.FirebaseSimpleLoginUser;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -13,6 +17,7 @@ import java.util.List;
 import fabianterhorst.github.io.schoolschedules.adapter.RestApiAdapter;
 import fabianterhorst.github.io.schoolschedules.api.PictoriusApi;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
+import fabianterhorst.github.io.schoolschedules.models.ClassGroup;
 import fabianterhorst.github.io.schoolschedules.models.Homework;
 import fabianterhorst.github.io.schoolschedules.models.Lesson;
 import fabianterhorst.github.io.schoolschedules.models.Representation;
@@ -44,16 +49,15 @@ public class DataStore {
         load();
     }
 
-
-    public void load(){
-
-    }
-
-    public void save(){
+    public void load() {
 
     }
 
-    public void setUser(FirebaseSimpleLoginUser user){
+    public void save() {
+
+    }
+
+    public void setUser(FirebaseSimpleLoginUser user) {
         SchoolSchedulesApplication app = SchoolSchedulesApplication.getInstance();
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<FirebaseSimpleLoginUser> jsonAdapter = moshi.adapter(FirebaseSimpleLoginUser.class);
@@ -61,9 +65,57 @@ public class DataStore {
             String json = jsonAdapter.toJson(user);
             app.setSettingsString("lastUser", json);
             callUserCallbacks();
-        }catch(IOException io){
+        } catch (IOException io) {
             io.printStackTrace();
         }
+    }
+
+    public FirebaseSimpleLoginUser getUser() {
+        SchoolSchedulesApplication app = SchoolSchedulesApplication.getInstance();
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<FirebaseSimpleLoginUser> jsonAdapter = moshi.adapter(FirebaseSimpleLoginUser.class);
+        try {
+            return jsonAdapter.fromJson(app.getSettingsString("lastUser"));
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        return null;
+    }
+
+    public void createClassGroup(ClassGroup classGroup) {
+        final SchoolSchedulesApplication app = SchoolSchedulesApplication.getInstance();
+        Firebase classes = app.getFirebase().child("classes").child(classGroup.getName());
+        classes.setValue(classGroup, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError error, Firebase firebase) {
+                if(error != null){
+                    Toast.makeText(app, error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void getClassGroups() {
+        Firebase classes = SchoolSchedulesApplication.getInstance().getFirebase().child("classes");
+        classes.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println(snapshot.getValue());
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    ClassGroup classGroup = postSnapshot.getValue(ClassGroup.class);
+                    System.out.println(classGroup.getName() + " - " + classGroup.getShortname());
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+    }
+
+    public boolean isLoggedIn() {
+        return getUser() != null;
     }
 
     public void setSchoolClassName() {
@@ -89,17 +141,17 @@ public class DataStore {
         delete(getHomeworks().get(position));
     }
 
-    public void callCallbacks(RealmObject realmObject){
-        if(realmObject instanceof Teacher){
+    public void callCallbacks(RealmObject realmObject) {
+        if (realmObject instanceof Teacher) {
             callTeacherCallbacks();
-        }else if(realmObject instanceof Lesson){
+        } else if (realmObject instanceof Lesson) {
             callLessonCallbacks();
-        }else if(realmObject instanceof Homework){
+        } else if (realmObject instanceof Homework) {
             callHomeworkCallbacks();
         }
     }
 
-    public void delete(final RealmObject realmObject){
+    public void delete(final RealmObject realmObject) {
         SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -109,19 +161,19 @@ public class DataStore {
         callCallbacks(realmObject);
     }
 
-    public void add(final RealmObject realmObject){
+    public void add(final RealmObject realmObject) {
         SchoolSchedulesApplication.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if(realmObject instanceof Teacher) {
+                if (realmObject instanceof Teacher) {
                     Teacher teacher = (Teacher) realmObject;
                     teacher.setId(realm.where(Teacher.class).maximumInt("id") + 1);
                     realm.copyToRealmOrUpdate(teacher);
-                }else if(realmObject instanceof Lesson) {
+                } else if (realmObject instanceof Lesson) {
                     Lesson lesson = (Lesson) realmObject;
                     lesson.setId(realm.where(Lesson.class).maximumInt("id") + 1);
                     realm.copyToRealmOrUpdate(lesson);
-                }else if(realmObject instanceof Homework) {
+                } else if (realmObject instanceof Homework) {
                     Homework homework = (Homework) realmObject;
                     homework.setId(realm.where(Homework.class).maximumInt("id") + 1);
                     realm.copyToRealmOrUpdate(homework);
