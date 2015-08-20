@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -37,4 +43,5 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.5'
     compile 'com.mikepenz:iconics:1.6.2@aar'
     compile 'com.mikepenz:community-material-typeface:1.1.71@aar'
+    compile 'com.firebase:firebase-client-android:2.3.1'
 }

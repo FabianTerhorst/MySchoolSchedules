@@ -42,13 +42,14 @@ public class AddActivity extends BaseActivity {
 
         setContentView(container);
 
-        View toolbarView = LayoutInflater.from(this).inflate(R.layout.toolbar, null);
+        View toolbarView = LayoutInflater.from(this).inflate(R.layout.toolbar, container, false);
         container.addView(toolbarView);
 
         Toolbar toolbar = (Toolbar) toolbarView.findViewById(R.id.toolbar);
         toolbar.setTitle(getToolbarTitle());
 
         setSupportActionBar(toolbar);
+
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);

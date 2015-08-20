@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.firebase.client.Firebase;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.Iconics;
 
@@ -23,6 +24,7 @@ public class SchoolSchedulesApplication extends Application {
     protected DataStore mDataStore;
     protected Realm mRealm;
     protected Activity mSplashActivity;
+    protected Firebase mFirebase;
 
     @Override
     public void onCreate() {
@@ -32,6 +34,7 @@ public class SchoolSchedulesApplication extends Application {
     }
 
     protected void initializeInstance(){
+        Firebase.setAndroidContext(this);
         Iconics.init(getApplicationContext());
         Iconics.registerFont(new CommunityMaterial());
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -41,6 +44,12 @@ public class SchoolSchedulesApplication extends Application {
         if (mDataStore == null)
             mDataStore = new DataStore();
         return mDataStore;
+    }
+
+    public Firebase getFirebase(){
+        if(mFirebase == null)
+            mFirebase = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com/");
+        return mFirebase;
     }
 
     public Realm getRealm() {
