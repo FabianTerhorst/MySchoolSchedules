@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import fabianterhorst.github.io.schoolschedules.R;
-import fabianterhorst.github.io.schoolschedules.SchoolSchedulesApplication;
 import fabianterhorst.github.io.schoolschedules.callbacks.DataChangeCallback;
-import fabianterhorst.github.io.schoolschedules.models.User;
 
 public abstract class AbstractSplashActivity extends BaseActivity {
 
@@ -23,22 +21,21 @@ public abstract class AbstractSplashActivity extends BaseActivity {
 
         getSchoolSchedulesApplication().setSplashActivity(this);
 
-        final EditText className = (EditText) findViewById(R.id.className);
+        //final EditText className = (EditText) findViewById(R.id.className);
+        final EditText userName = (EditText) findViewById(R.id.userName);
+        final EditText password = (EditText) findViewById(R.id.password);
 
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View view) {
-                if (className.length() > 0) {
-                    getSchoolSchedulesApplication().register(className.getEditableText().toString());
-                }
+                if (userName.length() > 0 && password.length() > 0)
+                    getSchoolSchedulesApplication().register(userName.getEditableText().toString(), password.getEditableText().toString());
             }
         });
-
         getDataStore().registerDataChangeCallback(new DataChangeCallback() {
             @Override
             public void onUserDataChange() {
-                if(getSchoolSchedulesApplication().getUser() != null)
-                    boot();
+                boot();
             }
         });
 
@@ -48,9 +45,9 @@ public abstract class AbstractSplashActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "start");
-        User user = SchoolSchedulesApplication.getInstance().getUser();
-        if (user != null)
-            boot();
+        //User user = SchoolSchedulesApplication.getInstance().getUser();
+        //if (user != null)
+        //    boot();
     }
 
     private void boot() {

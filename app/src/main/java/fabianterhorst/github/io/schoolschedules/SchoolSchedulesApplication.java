@@ -5,8 +5,13 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.simplelogin.FirebaseSimpleLoginError;
+import com.firebase.simplelogin.FirebaseSimpleLoginUser;
+import com.firebase.simplelogin.SimpleLogin;
+import com.firebase.simplelogin.SimpleLoginAuthenticatedHandler;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.Iconics;
 
@@ -78,14 +83,26 @@ public class SchoolSchedulesApplication extends Application {
         return RestApiAdapter.getInstance().create(PictoriusApi.class);
     }
 
-    public void register(final String className) {
-        getRealm().executeTransaction(new Realm.Transaction() {
+    public void register(final String userName, final String password) {
+        /*getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealm(new User(className));
+                realm.copyToRealm(new User("bla"));
+            }
+        });*/
+        SimpleLogin authClient = new SimpleLogin(getFirebase(), this);
+        authClient.createUser(userName, password, new SimpleLoginAuthenticatedHandler() {
+            public void authenticated(FirebaseSimpleLoginError error, FirebaseSimpleLoginUser user) {
+                if (error != null) {
+                    // There was an error creating this account
+                    Toast.makeText(SchoolSchedulesApplication.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    // We created a new user account
+                    getDataStore().setUser(user);
+                }
             }
         });
-        getDataStore().callUserCallbacks();
+        //getDataStore().callUserCallbacks();
     }
 
     public void setSplashActivity(Activity activity) {
@@ -125,6 +142,12 @@ public class SchoolSchedulesApplication extends Application {
     private void clearSettings() {
         SharedPreferences.Editor editor = mSettings.edit();
         editor.clear();
+        editor.apply();
+    }
+
+    public void setSettingsString(String key, String value){
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.clear();editor.putString(key, value);
         editor.apply();
     }
 

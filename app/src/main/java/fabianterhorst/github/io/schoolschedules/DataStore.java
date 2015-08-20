@@ -2,6 +2,11 @@ package fabianterhorst.github.io.schoolschedules;
 
 import android.widget.Toast;
 
+import com.firebase.simplelogin.FirebaseSimpleLoginUser;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +40,30 @@ public class DataStore {
     public DataStore() {
         mCallbacks = new ArrayList<>();
         mSchoolClassesCallbacks = new ArrayList<>();
-        setSchoolClassName();
+        //setSchoolClassName();
+        load();
+    }
+
+
+    public void load(){
+
+    }
+
+    public void save(){
+
+    }
+
+    public void setUser(FirebaseSimpleLoginUser user){
+        SchoolSchedulesApplication app = SchoolSchedulesApplication.getInstance();
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<FirebaseSimpleLoginUser> jsonAdapter = moshi.adapter(FirebaseSimpleLoginUser.class);
+        try {
+            String json = jsonAdapter.toJson(user);
+            app.setSettingsString("lastUser", json);
+            callUserCallbacks();
+        }catch(IOException io){
+            io.printStackTrace();
+        }
     }
 
     public void setSchoolClassName() {
@@ -213,7 +241,7 @@ public class DataStore {
             dataChangeCallback.onUserDataChange();
 
         //set new school class name when user changed
-        setSchoolClassName();
+        //setSchoolClassName();
     }
 
     public RealmResults<Representation> getRepresentationsByClassName(String className) {
